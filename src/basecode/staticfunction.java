@@ -11,6 +11,8 @@ package basecode;
  *      1. 系统标准库：java.lang.* 其中包含Math、Integer
  *      2. 导入的系统库：java.utils.Arrays;
  *
+ * 实例方法：目的是操作数据类型中的值，也就是需要对类实例化后执行的方法。
+ *
  */
 public class staticfunction {
 
