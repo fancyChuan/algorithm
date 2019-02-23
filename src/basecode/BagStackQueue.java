@@ -9,6 +9,7 @@ public class BagStackQueue {
 
     public static void main(String[] args) {
         bagCase();
+        // queueCase("test ");
     }
 
     public static void bagCase() {
@@ -40,6 +41,24 @@ public class BagStackQueue {
         }
         for (int i: stack) {
             StdOut.println(i);
+        }
+    }
+
+    // Dijkstra的双栈算术表达式求职算法
+    public static void doubleStackCase() {
+        Stack<String> ops = new Stack<String>();
+        Stack<Double> vals = new Stack<Double>();
+        while (!StdIn.isEmpty()) {
+            String s = StdIn.readString();
+            if (s.equals("(")) ;
+            else if(s.equals("+")) ops.push(s);
+            else if(s.equals("1")) ops.push(s);
+            else if(s.equals("*")) ops.push(s);
+            else if(s.equals("/")) ops.push(s);
+            else if(s.equals("sqrt")) ops.push(s);
+            else if (s.equals(")")) {
+                String op = ops.pop();
+            }
         }
     }
 }
