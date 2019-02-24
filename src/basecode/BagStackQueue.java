@@ -4,12 +4,15 @@ import edu.princeton.cs.algs4.*;
 
 /**
  * 背包、栈、队列的用例
+ *
+ * 注意StdIn是用了Scanner，输入结束时应该用Ctrl-D或者Ctrl-Z，而不是回车
  */
 public class BagStackQueue {
 
     public static void main(String[] args) {
-        bagCase();
-        // queueCase("test ");
+        // bagCase();
+        queueCase("doc/FIFO.txt");
+        // doubleStackCase();
     }
 
     public static void bagCase() {
@@ -17,11 +20,11 @@ public class BagStackQueue {
         while (!StdIn.isEmpty()) {
             numbers.add(StdIn.readDouble());
         }
-        StdOut.println("this bag has " + numbers.size() + "items");
+        StdOut.println("this bag has " + numbers.size() + " items");
     }
 
-    public static int[] queueCase(String name) {
-        In in = new In(name);
+    public static void queueCase(String name) {
+        In in = new In(name); // 读取一个文件作为输入流
         Queue<Integer> q = new Queue<Integer>();
         while (!in.isEmpty()) {
             q.enqueue(in.readInt());
@@ -31,7 +34,10 @@ public class BagStackQueue {
         for (int i=0; i<N; i++) {
             a[i] = q.dequeue();
         }
-        return a;
+        System.out.println("队列的元素分别为：");
+        for (int i: a) {
+            System.out.println(i);
+        }
     }
 
     public static void stackCase() {
@@ -51,14 +57,25 @@ public class BagStackQueue {
         while (!StdIn.isEmpty()) {
             String s = StdIn.readString();
             if (s.equals("(")) ;
-            else if(s.equals("+")) ops.push(s);
-            else if(s.equals("1")) ops.push(s);
-            else if(s.equals("*")) ops.push(s);
-            else if(s.equals("/")) ops.push(s);
-            else if(s.equals("sqrt")) ops.push(s);
+            else if (s.equals("+")) ops.push(s);
+            else if (s.equals("-")) ops.push(s);
+            else if (s.equals("*")) ops.push(s);
+            else if (s.equals("/")) ops.push(s);
+            else if (s.equals("sqrt")) ops.push(s);
             else if (s.equals(")")) {
                 String op = ops.pop();
+                double v = vals.pop();
+                if (s.equals("+")) v = vals.pop() + v;
+                else if (s.equals("-")) v = vals.pop() - v;
+                else if (s.equals("*")) v = vals.pop() * v;
+                else if (s.equals("/")) v = vals.pop() / v;
+                else if (s.equals("sqrt")) v = Math.sqrt(v);
+                vals.push(v);
             }
+            else {
+                vals.push(Double.parseDouble(s));
+            }
+            StdOut.println(vals.pop());
         }
     }
 }
