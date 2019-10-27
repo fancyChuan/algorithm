@@ -11,8 +11,9 @@ public class BagStackQueue {
 
     public static void main(String[] args) {
         // bagCase();
-        queueCase("doc/FIFO.txt");
-        // doubleStackCase();
+        // queueCase("doc/FIFO.txt");
+        // stackCase();
+        testEvaluate();
     }
 
     public static void bagCase() {
@@ -23,6 +24,11 @@ public class BagStackQueue {
         StdOut.println("this bag has " + numbers.size() + " items");
     }
 
+    /**
+     * new In(String name)
+     *      其实等于：   File file = new File(name);
+     *                 Scanner scanner = new Scanner(new BufferedInputStream(new InputStream(file)), "UTF-8")
+     */
     public static void queueCase(String name) {
         In in = new In(name); // 读取一个文件作为输入流
         Queue<Integer> q = new Queue<Integer>();
@@ -50,8 +56,8 @@ public class BagStackQueue {
         }
     }
 
-    // Dijkstra的双栈算术表达式求职算法
-    public static void doubleStackCase() {
+    // Dijkstra的双栈算术表达式求值算法
+    public static void testEvaluate() {
         Stack<String> ops = new Stack<String>();
         Stack<Double> vals = new Stack<Double>();
         while (!StdIn.isEmpty()) {
@@ -65,11 +71,11 @@ public class BagStackQueue {
             else if (s.equals(")")) {
                 String op = ops.pop();
                 double v = vals.pop();
-                if (s.equals("+")) v = vals.pop() + v;
-                else if (s.equals("-")) v = vals.pop() - v;
-                else if (s.equals("*")) v = vals.pop() * v;
-                else if (s.equals("/")) v = vals.pop() / v;
-                else if (s.equals("sqrt")) v = Math.sqrt(v);
+                if (op.equals("+")) v = vals.pop() + v;
+                else if (op.equals("-")) v = vals.pop() - v;
+                else if (op.equals("*")) v = vals.pop() * v;
+                else if (op.equals("/")) v = vals.pop() / v;
+                else if (op.equals("sqrt")) v = Math.sqrt(v);
                 vals.push(v);
             }
             else {
