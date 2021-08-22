@@ -21,4 +21,11 @@ public class StackSolutionTest {
         System.out.println(StackSolution.isValid2("(){[()()]}"));
         System.out.println(StackSolution.isValid2("([][)))"));
     }
+
+    @Test
+    public void testFishSolution() {
+        int[] size = new int[] {4, 3, 2, 1, 5};
+        int[] dir = new int[] {1, 1, 1, 1, 0};
+        System.out.println(StackSolution.fishSolution(size, dir));
+    }
 }

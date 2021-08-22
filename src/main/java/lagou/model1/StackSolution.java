@@ -152,4 +152,52 @@ public class StackSolution {
         return t.empty();
     }
 
+    /**
+     * 例 2：大鱼吃小鱼
+     * 复杂度分析：每只鱼只入栈一次，出栈一次，所以时间复杂度 为 O(N)，
+     *          而空间复杂度为 O(N)，因为最差情况下可能把所有的鱼都入栈。
+     */
+    public static int fishSolution(int[] fishSize, int[] fishDir) {
+        Stack<Integer> stack = new Stack<>();
+        // 鱼的方向
+        final int left = 0;
+        final int right = 1;
+
+        final int fishNumber = fishSize.length;
+        if (fishNumber <= 1) {
+            return fishNumber;
+        }
+        for (int i = 0; i < fishNumber; i++) {
+            final int curFishSize = fishSize[i];
+            final int curFishDir = fishDir[i];
+            System.out.println("------\n扫描到第" + i + "条鱼，大小为：" + curFishSize + "，方向为：" + curFishDir);
+            boolean hasEat = false;
+            while (!stack.isEmpty() && fishDir[stack.peek()] == right && curFishDir == left) {
+                // 需要消除掉栈顶的内容：栈顶的鱼要么吃掉右边的鱼，要么被右边的鱼吃掉。那么要求栈顶的与是向右游的，而当前的鱼是向左游的
+                // 这个时候如果栈顶的与大，则吃掉右边的，自己保留
+                if (fishSize[stack.peek()] > curFishSize) {
+                    hasEat = true;
+                    break;
+                } else {
+                    // 栈顶的鱼比当前的小，那么栈顶被吃掉，也就需要出栈
+                    stack.pop();
+                    System.out.print("栈顶鱼被吃掉\t");
+                    printStack(stack);
+                }
+            }
+            // 只有栈里边的鱼被吃掉了或者栈里没有鱼，才需要入栈
+            if (!hasEat) {
+                stack.push(i);
+                System.out.print("新鱼入栈\t");
+                printStack(stack);
+            }
+        }
+
+        return stack.size();
+    }
+
+
+    static void printStack(Stack stack) {
+        System.out.println("【此时】栈的大小为：" + stack.size() + "\t栈的内容为：" + stack.toString());
+    }
 }
