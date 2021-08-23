@@ -1,5 +1,6 @@
 package lagou.model1;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -194,6 +195,38 @@ public class StackSolution {
         }
 
         return stack.size();
+    }
+
+    /**
+     * 例 3：找出数组中右边第一个比我小的元素
+     *
+     */
+    public static int[] findRightSmall(int[] A) {
+
+        int[] ans = new int[A.length];
+        // 栈中元素存的是下标
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < A.length; i++) {
+            final int x = A[i];
+            System.out.println("--------\n扫描到数字：" + x);
+            // 如果比栈顶存的下标所对应的数据要小，那么弹出出栈
+            while (!stack.empty() && A[stack.peek()] > x) {
+                ans[stack.peek()] = i;
+                stack.pop();
+                System.out.print("下标出栈\t");
+                printStack(stack);
+            }
+            stack.push(i);
+            System.out.print("下标" + i + "入栈\t");
+            printStack(stack);
+            System.out.println(Arrays.toString(ans));
+        }
+        while (!stack.empty()) {
+            ans[stack.peek()] = -1;
+            stack.pop();
+        }
+
+        return ans;
     }
 
 
