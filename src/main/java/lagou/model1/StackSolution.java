@@ -199,21 +199,22 @@ public class StackSolution {
 
     /**
      * 例 3：找出数组中右边第一个比我小的元素
-     *
+     * 复杂度分析：每个元素只入栈一次，出栈一次，所以时间复杂度为 O(N)，
+     *          而空间复杂度为 O(N)，因为最差情况可能会把所有的元素都入栈
      */
     public static int[] findRightSmall(int[] A) {
-
         int[] ans = new int[A.length];
         // 栈中元素存的是下标
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < A.length; i++) {
             final int x = A[i];
-            System.out.println("--------\n扫描到数字：" + x);
+            System.out.println("--------\n第" + i +"次扫描，扫描到数字：" + x);
             // 如果比栈顶存的下标所对应的数据要小，那么弹出出栈
             while (!stack.empty() && A[stack.peek()] > x) {
+                // 这里的循环很关键，
                 ans[stack.peek()] = i;
+                System.out.print("下标" + stack.peek() + "出栈\t");
                 stack.pop();
-                System.out.print("下标出栈\t");
                 printStack(stack);
             }
             stack.push(i);
@@ -229,7 +230,46 @@ public class StackSolution {
         return ans;
     }
 
+    /**
+     * 例 4：字典序最小的 k 个数的子序列
+     *  字典序：简单的理解就是两个数组从第一个元素开始比，第一个元素小的字典序也小。
+     *        第一个元素相同的情况下，比较第二个元素，第2个元素小的对应的数组字典序也小
+     */
+    public static int[] findSmallSeq(int[] nums, int k) {
+        int[] ans = new int[k];
+        Stack<Integer> stack = new Stack<>();
 
+        for (int i = 0; i < nums.length; i++) {
+            final int x = nums[i];
+            System.out.println("--------\n第" + i +"次扫描，扫描到数字：" + x);
+            // 数组中还剩余的个数
+            final int left = nums.length - i - 1;
+            // 什么情况下需要弹出：x比栈顶元素小，并且栈的元素个数与剩余的数组个数加起来要大于等于k
+            while (!stack.empty() && x < stack.peek() && (stack.size() + left)>=k) {
+                stack.pop();
+            }
+            // 需要消除的消除后，把最新的元素入栈
+            stack.push(x);
+            printStack("元素" + x + "入栈" ,stack);
+        }
+        // 如果栈中的元素太多了，要剔除条
+        while (stack.size() > k) {
+            stack.pop();
+        }
+        printStack("剔除多余元素后，", stack);
+
+        // 将栈中的元素取出来，注意顺序
+        for (int j = k-1; j >= 0; j--) {
+            ans[j] = stack.pop();
+        }
+
+        return ans;
+    }
+
+
+    static void printStack(String preContent, Stack stack) {
+        System.out.println(preContent +"【此时】栈的大小为：" + stack.size() + "\t栈的内容为：" + stack.toString());
+    }
     static void printStack(Stack stack) {
         System.out.println("【此时】栈的大小为：" + stack.size() + "\t栈的内容为：" + stack.toString());
     }
