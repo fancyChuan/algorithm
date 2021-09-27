@@ -1,5 +1,6 @@
 package lagou.model1;
 
+import lagou.common.Node;
 import lagou.common.TreeNode;
 
 import java.util.ArrayList;
@@ -77,5 +78,66 @@ public class QueueSolution {
             ans.add(curResult);
         }
         return ans;
+    }
+
+    /**
+     * 思考题：
+     *  填充二叉树里所有的 next 指针，使其指向右边的结点，如果右边没有结点，那么设置为空指针。
+     *
+     *  结题的关键思路还是：层次遍历，一层一层的处理【问题拆解，分层解决】
+     *  测试地址：https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/submissions/
+     */
+    public static Node treeNextSolution(Node root) {
+        Node Q = null;
+        if (root != null) {
+            Q = root;
+        }
+        // 一个Q遍历一层，在这一层遍历的时候，就要把下一层都找到，然后通过next来连接
+        while (Q != null) {
+            // 下一层的起点。只需要被赋值一次
+            Node nextLevelHead = null;
+            // 用于填充next的主节点，nextLevelPreNode.next=?? 因此这个变量需要不断的移动
+            Node nextLevelPreNode = null;
+
+            // 这里的循环需要遍历这一层的每个节点
+            // 刚开始就是遍历Q
+            Node currentNode = Q;
+            while (currentNode != null) {
+                /**
+                 * 左结点不为空的处理，有以下职责
+                 * 1. 如果下一层的头结点nextLevelHead还没有被赋值，需要赋值
+                 * 2. 如果有前一个节点nextLevelPreNode，那么其next指针需要被填充。这种情况出现在下一层非第一个左节点时
+                 * 3. 将自己作为可能存在的下一节点的前节点。即nextLevelPreNode=自己
+                 */
+                if (currentNode.left != null) {
+                    if (nextLevelHead == null) {
+                        nextLevelHead = currentNode.left;
+                    }
+                    if (nextLevelPreNode != null) {
+                        nextLevelPreNode.next = currentNode.left;
+                    }
+                    nextLevelPreNode = currentNode.left;
+                }
+                /**
+                 * 职责跟左节点类似
+                 */
+                if (currentNode.right != null) {
+                    if (nextLevelHead == null) {
+                        nextLevelHead = currentNode.right;
+                    }
+                    // 记录好下一个节点
+                    if (nextLevelPreNode != null) {
+                        nextLevelPreNode.next = currentNode.right;
+                    }
+                    // nextLevelPreNode滑动到下一个节点
+                    nextLevelPreNode = currentNode.right;
+                }
+                // 将当层的下一个节点给到currentNode，以便遍历
+                currentNode = currentNode.next;
+            }
+            // 将下一层的头节点赋值给Q
+            Q = nextLevelHead;
+        }
+        return root;
     }
 }
