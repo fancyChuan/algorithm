@@ -3,10 +3,7 @@ package lagou.model1;
 import lagou.common.Node;
 import lagou.common.TreeNode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class QueueSolution {
 
@@ -139,5 +136,34 @@ public class QueueSolution {
             Q = nextLevelHead;
         }
         return root;
+    }
+
+    /**
+     * [239] 滑动窗口最大值
+     *      https://leetcode-cn.com/problems/sliding-window-maximum/description/
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        // 单调队列使用双端队列来实现
+        ArrayDeque<Integer> Q = new ArrayDeque<Integer>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int val = nums[i];
+            // 下面的循环是为了实现单调的目的
+            while (!Q.isEmpty() && Q.getLast() < val) {
+                Q.removeLast();
+            }
+            Q.addLast(val);
+            // 前k个元素要全部入队了，才能开始取最大值
+            if (i < k - 1) {
+                continue;
+            }
+            ans.add(Q.getFirst());
+            // 取出数据后，将首元素出队
+            if (!Q.isEmpty() && Q.getFirst() == nums[i-k+1]) {
+                Q.removeFirst();
+            }
+        }
+        return ans.stream().mapToInt(Integer::valueOf).toArray();
     }
 }

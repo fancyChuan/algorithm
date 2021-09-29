@@ -1,9 +1,9 @@
 package nn2.injava.queue;
 
-public interface MyQueue {
+public interface MyQueue<E> {
+    boolean enQueue(E e);
+    E deQueue();
+    E getFront();
     int getSize();
     boolean isEmpty();
-    boolean enQueue(int value);
-    boolean deQueue();
-
 }
