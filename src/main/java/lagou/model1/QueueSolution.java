@@ -169,4 +169,38 @@ public class QueueSolution {
         }
         return ans.stream().mapToInt(Integer::valueOf).toArray();
     }
+
+    /**
+     * 例4：捡金币游戏
+     *  [1696] 跳跃游戏 VI
+     *      https://leetcode-cn.com/problems/jump-game-vi/description/
+     */
+    public int maxResult(int[] nums, int k) {
+        // 处理掉各种临界条件
+        if (nums == null || nums.length == 0 || k <= 0) {
+            return 0;
+        }
+        // 使用get[]数组来存放递归求解中的中间值
+        // 即表示：截止到某个位置所能获取的最大金币
+        int[] get = new int[nums.length];
+        ArrayDeque<Integer> Q = new ArrayDeque<>();
+        for (int i = 0; i < nums.length; i++) {
+            // TODO: 待补充
+            if (i > k) {
+                // 千万注意，这是里针对get[]数组，也就是中间结果进入单调队列
+                if (!Q.isEmpty() && Q.getFirst() == get[i-k-1]) {
+                    Q.removeFirst();
+                }
+            }
+            // 注意第一次Q是空的
+            int old = Q.isEmpty() ? 0: Q.getFirst();
+            get[i] = old + nums[i];
+            // get[i]入单调队列，需要判断
+            while (!Q.isEmpty() && Q.getLast() < get[i]) {
+                Q.removeLast();
+            }
+            Q.addLast(get[i]);
+        }
+        return get[nums.length -1];
+    }
 }
