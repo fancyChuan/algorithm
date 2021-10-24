@@ -185,7 +185,6 @@ public class QueueSolution {
         int[] get = new int[nums.length];
         ArrayDeque<Integer> Q = new ArrayDeque<>();
         for (int i = 0; i < nums.length; i++) {
-            // TODO: 待补充
             if (i > k) {
                 // 千万注意，这是里针对get[]数组，也就是中间结果进入单调队列
                 if (!Q.isEmpty() && Q.getFirst() == get[i-k-1]) {
