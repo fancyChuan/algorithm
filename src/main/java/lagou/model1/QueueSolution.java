@@ -139,16 +139,18 @@ public class QueueSolution {
     }
 
     /**
-     * [239] 滑动窗口最大值
+     * 单调队列的应用场景：
+     *  [239] 滑动窗口最大值
      *      https://leetcode-cn.com/problems/sliding-window-maximum/description/
      */
-    public int[] maxSlidingWindow(int[] nums, int k) {
+    public static int[] maxSlidingWindow(int[] nums, int k) {
         ArrayList<Integer> ans = new ArrayList<>();
         // 单调队列使用双端队列来实现
         ArrayDeque<Integer> Q = new ArrayDeque<Integer>();
 
         for (int i = 0; i < nums.length; i++) {
             int val = nums[i];
+            System.out.println("===== 第" + i + "个元素为：" + val);
             // 下面的循环是为了实现单调的目的
             while (!Q.isEmpty() && Q.getLast() < val) {
                 Q.removeLast();
@@ -163,6 +165,7 @@ public class QueueSolution {
             if (!Q.isEmpty() && Q.getFirst() == nums[i-k+1]) {
                 Q.removeFirst();
             }
+            System.out.println("      处理后，单调队列的内容为：" + Q);
         }
         return ans.stream().mapToInt(Integer::valueOf).toArray();
     }

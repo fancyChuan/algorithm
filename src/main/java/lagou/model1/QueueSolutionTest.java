@@ -23,4 +23,9 @@ public class QueueSolutionTest {
         // 使用next指针来指向右边节点
 
     }
+
+    @Test
+    public void testMaxSlidingWindow() {
+        QueueSolution.maxSlidingWindow(new int[] {1,3,-1,-3,5,3}, 3);
+    }
 }
