@@ -215,4 +215,59 @@ public class HeapSolution {
         }
         return ans;
     }
+
+    /**
+     * 例3 汽车加油次数
+     *  [871] 最低加油次数
+     *      https://leetcode-cn.com/problems/minimum-number-of-refueling-stops/description/
+     *  TODO: 这个题值得用来训练自己解题的思维以及如何形成代码的过程
+     */
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        final int N = stations.length;
+        int i = 0;
+        // 当前汽车位置以及还剩多少油
+        int curPos = 0;
+        int fuelLeft = startFuel;
+
+        PriorityQueue<Integer> Q = new PriorityQueue<>((v1, v2) -> v2 - v1);
+        // 从副油箱里往汽车加汽油的次数
+        int addFuelTimes = 0;
+        while (curPos + fuelLeft < target) {
+            int pos = target;
+            int fuel = 0;
+            if (i < N && stations[i][0] < target) {
+                pos = stations[i][0];
+                fuel = stations[i][1];
+            }
+            while (curPos + fuelLeft < pos) {
+                if (Q.isEmpty()) {
+                    return -1;
+                }
+                final int curMaxFuel = Q.peek();
+                Q.poll();
+                fuelLeft += curMaxFuel;
+                addFuelTimes ++;
+            }
+            final int fuelCost = pos - curPos;
+            fuelLeft -= fuelCost;
+            curPos = pos;
+            if (fuel > 0) {
+                Q.offer(fuel);
+            }
+            i++;
+        }
+        return curPos + fuelLeft >= target ? addFuelTimes : -1;
+    }
+    /**
+     * 练习题7
+     *  [743] 网络延迟时间
+     *  *
+     *  * https://leetcode-cn.com/problems/network-delay-time/description/
+     */
+    // times实际上是边集
+    public int networkDelayTime(int[][] times, int N, int k) {
+        // todo:
+        return 0;
+    }
+
 }
