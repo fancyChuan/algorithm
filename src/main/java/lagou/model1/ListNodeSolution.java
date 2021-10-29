@@ -33,7 +33,7 @@ public class ListNodeSolution {
     public ListNode removeElements(ListNode head, int val) {
         ListNode dummy = new ListNode();
         ListNode tail = dummy;
-        while (head != null) {
+        while (head != null) {// 这里如果为了不修改head这条链，那最好 p = head，然后遍历p来保留head的完整信息
             ListNode temp = head.next;
             if (head.val != val) {
                 head.next = null;
@@ -42,6 +42,82 @@ public class ListNodeSolution {
             }
             head = temp;
         }
+        return dummy.next;
+    }
+    /**
+     * 练习题 1：给定一个排序链表，删除重复出现的元素，使得每个元素只出现一次。
+     * 输入: 1->1->2->3->3
+     * 输出: 1->2->3
+     * https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/description/
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+        // 不直接处理head，而是增加一个新的对象来遍历
+        ListNode p = head;
+        while (p != null) {
+            ListNode temp = p.next;
+            // TODO: 为什么还需要有 tail == dummy这个条件？
+            if (p.val != tail.val || tail == dummy) {
+                tail.next = p;
+                tail = tail.next;
+            }
+            p = temp;
+        }
+        tail.next = null;
+        return dummy.next;
+    }
+    /**
+     * 练习题 2：给定一个排序链表，删除重复出现的元素，只留下没有重复出现的元素。
+     * 输入：1->1->2->3->3
+     * 输出：2
+     *
+     * https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/description/
+     */
+    public static ListNode deleteDuplicates2(ListNode head) {
+        // 用来存放最后结果的链表
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+        // 用来存放相同节点的链表
+        ListNode tmp_dummy = new ListNode();
+        ListNode tmp_tail = tmp_dummy;
+
+        ListNode p = head;
+
+        while (p != null) {
+            ListNode back = p.next;
+            // 第一个元素和重复的元素都存在到tmp_dummy中
+            if (tmp_tail == tmp_dummy || p.val == tmp_tail.val) {
+                tmp_tail.next = p;
+                tmp_tail = tmp_tail.next;
+            } else {
+                // 当发现不重复时
+                // 如果只有一个元素，那也写入dummy
+                if (tmp_dummy.next == tmp_tail) {
+                    tail.next = tmp_tail;
+                    tail = tail.next;
+                }
+                // 如果tmp链表中有多个结点，那么什么也不做
+
+                // 无论tmp链表中是一个结点，还是有多个结点
+                // 都要清空tmp链表
+                tmp_tail = tmp_dummy;
+                tmp_dummy.next = null;
+
+                // 再把p结点安装到tmp上
+                // 可以和前面的语句合并
+                // 这里为了逻辑更清晰这么写。
+                tmp_tail.next = p;
+                tmp_tail = p;
+            }
+            p = back;
+        }
+        // 全部遍历完了，如果tmp链表中还有一个元素（说明不重复），那也要加入
+        if (tmp_dummy.next == tmp_tail) {
+            tail.next = tmp_tail;
+            tail = tail.next;
+        }
+        tail.next = null;
         return dummy.next;
     }
 }
