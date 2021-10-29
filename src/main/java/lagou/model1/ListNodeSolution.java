@@ -2,6 +2,8 @@ package lagou.model1;
 
 import lagou.common.ListNode;
 
+import java.util.PriorityQueue;
+
 public class ListNodeSolution {
 
     /**
@@ -120,4 +122,64 @@ public class ListNodeSolution {
         tail.next = null;
         return dummy.next;
     }
+
+    /**
+     * 例 3 ：合并两个有序链表
+     * https://leetcode-cn.com/problems/merge-two-sorted-lists/description/
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+
+        ListNode A = l1;
+        ListNode B = l2;
+        while (A != null || B != null) {
+            if (B == null || (A != null && A.val <= B.val)) {
+                tail.next = A;
+                tail = tail.next;
+                // A指针移动到下一个
+                A = A.next;
+            } else {
+                tail.next = B;
+                tail = tail.next;
+                B = B.next;
+            }
+        }
+
+        tail.next = null;
+        return dummy.next;
+    }
+    /**
+     * 练习题 3：给定 k 个有序链表，合并成一个有序链表
+     * [23] 合并K个升序链表
+     *
+     *  https://leetcode-cn.com/problems/merge-k-sorted-lists/description/
+     */
+    public ListNode mergeKLists(ListNode[] A) {
+        int N = A!=null ? A.length : 0;
+        PriorityQueue<ListNode> Q = new PriorityQueue<>();
+
+        for (int i = 0; i < N; i++) {
+            if (A[i] != null) {
+                Q.offer(A[i]);
+            }
+        }
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+
+        while (!Q.isEmpty()) {
+            ListNode cur = Q.poll();
+
+            tail.next = cur;
+            tail = cur;
+
+            if (cur.next != null) {
+                Q.add(cur.next);
+            }
+        }
+
+        tail.next = null;
+        return dummy.next;
+    }
+
 }
