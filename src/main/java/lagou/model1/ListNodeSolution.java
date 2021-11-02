@@ -181,5 +181,16 @@ public class ListNodeSolution {
         tail.next = null;
         return dummy.next;
     }
-
+    /**
+     * 例 4：交换链表中的结点
+     * 【题目】给定一个链表，需要将里面的结点两两交换。
+     *
+     * 输入：[1->2->3->4->5->6]
+     *
+     * 输出：[2->1->4->3->6->5]
+     */
+    private ListNode merge(ListNode odd, ListNode even) {
+        // todo
+        return null;
+    }
 }
