@@ -124,5 +124,49 @@ public class TreeSolution {
             || isSubtree(s.left, t)
             || isSubtree(s.right, t);
     }
+
+    /**
+     * 例 2：目标和的所有路径
+     * 【题目】给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+     *      叶子节点 是指没有子节点的节点。
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/path-sum-ii
+     *
+     * 这道题的隐藏意思是：从根节点遍历所有的叶子结点，拿到所有的“完整路径”，并计算完整的路径是否等于目标值
+     *  - 递归解法的关键：写一个递归函数
+     *  - 栈解法的关键：两层遍历
+     *
+     *  【小结】本质上，这道题的考点就是：回溯，只不过借用了二叉树这个皮。反过来，在二叉树上进行回溯的代码模板，也需要熟练掌握
+     */
+    // 存放答案的对象
+    private List<List<Integer>> pathAns = null;
+    // 递归函数
+    private void backTrace(TreeNode root, List<Integer> path, int sum, int target) {
+        if (root == null) {
+            return;
+        }
+        path.add(root.val);
+        sum += root.val;
+        // 如果已经访问到末尾的叶子结点的。判断是否等于目标值
+        if (root.left == null && root.right == null) {
+            if (sum == target) {
+                // pathAns.add(path); // 这行代码在本地编译器是正常的，但是在leecode上，添加进去的就是[]
+                pathAns.add(new ArrayList<>(path));
+            }
+        } else {
+            // 递归左右子树
+            backTrace(root.left, path, sum, target);
+            backTrace(root.right, path, sum, target);
+        }
+        // 每走完一次递归，都需要把最后的节点干掉！
+        path.remove(path.size() - 1);
+
+    }
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        pathAns = new ArrayList<>();
+        ArrayList<Integer> path = new ArrayList<>();
+        backTrace(root, path, 0, targetSum);
+        return pathAns;
+    }
 }
 
