@@ -8,7 +8,6 @@ import java.util.Stack;
 
 public class TreeSolution {
 
-
     /**
      * 递归前序遍历
      *  - 时间复杂度，由于树上的每个结点都只访问一次，并且每次访问都只有一次压栈弹栈操作，所以复杂度为 O(N)。
@@ -18,7 +17,7 @@ public class TreeSolution {
     public void preOrder(TreeNode root, List<Integer> ans) {
         if (root != null) {
             // 先处理根结点
-            ans.add(root.value);
+            ans.add(root.val);
 
             // 递归处理左边子节点
             preOrder(root.left, ans);
@@ -40,7 +39,7 @@ public class TreeSolution {
         while (root != null & !stack.isEmpty()) {
             while (root != null) {
                 stack.push(root);
-                ans.add(root.value);
+                ans.add(root.val);
                 root = root.left;
             }
             root = stack.pop();
@@ -79,17 +78,51 @@ public class TreeSolution {
         return ansBST;
     }
     public void preOrder(TreeNode root, Long leftValue, Long rightValue) {
-        if (root == null && !ansBST) {
+        // 一旦发现非 ansBST 或者发现结点是null，那么本次就不需要判断，直接跳出
+        if (root == null || !ansBST) {
             return;
         }
-        if (!(leftValue < root.value && root.value < rightValue)) {
+        if (!(leftValue < root.val && root.val < rightValue)) {
             ansBST = false;
             return;
         }
         // 遍历左子树
-        preOrder(root.left, leftValue, Long.valueOf(root.value));
+        preOrder(root.left, leftValue, Long.valueOf(root.val));
         // 遍历右子树
-        preOrder(root.right, Long.valueOf(root.value), rightValue);
+        preOrder(root.right, Long.valueOf(root.val), rightValue);
+    }
+
+    /**
+     * TODO:使用栈来完成影子二叉树的验证
+     */
+
+    /**
+     * 练习题 1：“影子”二叉树还可以解决“是否相同的树”的问题。比如给定两棵二叉树，要求判断这两棵二叉树是不是一样的？
+     */
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == q) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return  false;
+        }
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    /**
+     * 练习题 2：当我们写出“判断是否相同的树”的代码之后，可以开始思考另外一个问题——如何判断一棵树是不是另外一棵树的子树？
+     */
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (s == t) {
+            return true;
+        }
+        if (s == null || t == null) {
+            return false;
+        }
+        // TODO 注意这里的条件
+        return s.val==t.val && isSameTree(s, t)
+            || isSubtree(s.left, t)
+            || isSubtree(s.right, t);
     }
 }
 

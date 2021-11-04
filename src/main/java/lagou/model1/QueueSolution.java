@@ -30,7 +30,7 @@ public class QueueSolution {
             // 通过遍历，把当层的结点都取出来
             for (int i = 0; i < levelSize; i++) {
                 TreeNode node = queue.poll();
-                levelValue.add(node.value); // int[]没有add或者put方法，需要通过下标的方式读写
+                levelValue.add(node.val); // int[]没有add或者put方法，需要通过下标的方式读写
                 // 把遍历到的下一层结点都放入队列，并且不让空指针放入队列
                 if (node.left != null) {
                     queue.offer(node.left);
@@ -69,7 +69,7 @@ public class QueueSolution {
                 if (treeNode.right != null) {
                     nextLevel.add(treeNode.right);
                 }
-                curResult.add(treeNode.value);
+                curResult.add(treeNode.val);
             }
             curLevel = nextLevel;
             ans.add(curResult);
