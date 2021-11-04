@@ -62,6 +62,34 @@ public class TreeSolution {
      *  - 根结点的值大于所有的左子树结点的值
      *  - 根结点的值小于所有的右子树结点的值
      *  - 左右子树也必须满足以上特性
+     *  [98] 验证二叉搜索树
+     *      https://leetcode-cn.com/problems/validate-binary-search-tree/description/
+     *
+     *  核心：
+     *    lnode rnode
+     *      \    /
+     *       node
+     *   判断 node是否在(lnode, rnode)内
      */
-
+    boolean ansBST = true;
+    public boolean isValidBST(TreeNode root) {
+        ansBST = true;
+        // 根据核心，根结点没有父节点，因此用 (Long.MIN_VALUE, Long.MAX_VALUE)
+        preOrder(root, Long.MIN_VALUE, Long.MAX_VALUE);
+        return ansBST;
+    }
+    public void preOrder(TreeNode root, Long leftValue, Long rightValue) {
+        if (root == null && !ansBST) {
+            return;
+        }
+        if (!(leftValue < root.value && root.value < rightValue)) {
+            ansBST = false;
+            return;
+        }
+        // 遍历左子树
+        preOrder(root.left, leftValue, Long.valueOf(root.value));
+        // 遍历右子树
+        preOrder(root.right, Long.valueOf(root.value), rightValue);
+    }
 }
+

@@ -9,15 +9,15 @@ public class ListNode {
     public ListNode(int x) {
         val = x;
     }
-    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    public ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 
     @Override
     public String toString() {
-        String content = "" + val;
+        StringBuilder content = new StringBuilder("" + val);
         while (next != null) {
-            content = content + " -> " + next.val;
+            content.append(" -> ").append(next.val);
             next = next.next;
         }
-        return content;
+        return content.toString();
     }
 }
