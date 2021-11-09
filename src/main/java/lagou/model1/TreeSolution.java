@@ -168,5 +168,27 @@ public class TreeSolution {
         backTrace(root, path, 0, targetSum);
         return pathAns;
     }
+
+    /**
+     * 使用栈完成中序遍历
+     */
+    public ArrayList<Integer> inOrderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        ArrayList<Integer> ans = new ArrayList<>();
+        while (root != null || !stack.isEmpty()) {
+            // 内层循环，不断访问左节点
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            // 外层循环开启取出结点，并直接先访问，然后再查看是否有右节点（有的话压栈）
+            TreeNode node = stack.pop();
+            // 先访问结点
+            ans.add(node.val);
+            // 转向右节点
+            root = node.right;
+        }
+        return ans;
+    }
 }
 
