@@ -190,5 +190,35 @@ public class TreeSolution {
         }
         return ans;
     }
+
+    /**
+     * 使用中序遍历验证“搜索二叉树”
+     */
+    // 递归的关键是写一个递归函数
+    private boolean midAnsBST = true;
+    // 注意! 这个变量必须使用全局变量
+    private Long preValue;
+    private void midOrder(TreeNode root) {
+        if (root == null || !midAnsBST) {
+            return;
+        }
+        // 递归访问左节点
+        midOrder(root.left);
+        // 访问当前节点
+        if (root.val <= preValue) {
+            midAnsBST = false;
+            return;
+        }
+        // 如果不使用全局变量，因为采用中序遍历，这行代码导致上一个递归用到的preValue是旧的数据！
+        preValue = (long) root.val;
+        // 递归访问右节点
+        midOrder(root.right);
+    }
+    public boolean midIsValidBST(TreeNode root) {
+        // 注意这个地方还是得用Long类型！
+        preValue = Long.MIN_VALUE;
+        midOrder(root);
+        return midAnsBST;
+    }
 }
 
