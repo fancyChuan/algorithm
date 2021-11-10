@@ -220,5 +220,36 @@ public class TreeSolution {
         midOrder(root);
         return midAnsBST;
     }
+
+    /**
+     * 使用栈实现 后序遍历
+     *
+     */
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode pre = root;
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            // 先不弹出来
+            TreeNode node = stack.peek();
+            if (node.right != null && node.right != pre) {
+                // 注意要避免右节点的重复遍历
+                // 怎么发现需要加个pre呢？当你自己画一个二叉树的时候，某个节点模拟一次发挥发现！
+                // 一定要勤画图！！
+                root = node.right;
+            } else {
+                // 说明没有右子树了，开始真正的弹栈
+                stack.pop();
+                // 开始访问节点
+                ans.add(node.val);
+                pre = node; // 记录已访问的节点
+            }
+        }
+        return ans;
+    }
 }
 
