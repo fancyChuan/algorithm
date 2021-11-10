@@ -291,5 +291,40 @@ public class TreeSolution {
         parsePost(root);
         return isBSTPost;
     }
+
+    /**
+     * 例 6：最低公共祖先
+     * 【题目】给定一棵二叉树，和两个在树上的结点，返回这两个结点的最低公共祖先。比如 [5,3] 两个结点的最低公共祖先是结点 6。
+     *  https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
+     */
+    private TreeNode ansNode;
+    // 先实现一个递归函数：这个递归函数要实现节点的统计
+    private int postCount(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return 0;
+        }
+        int leftCnt = postCount(root.left, p, q);
+        int rightCnt = postCount(root.right, p, q);
+        if (ansNode != null) {
+            return 0;
+        }
+
+        int currentCnt = 0;
+        if (root.val == p.val || root.val == q.val) {
+            currentCnt = 1;
+        }
+
+        int sum = leftCnt + rightCnt + currentCnt;
+        if (sum == 2) {
+            ansNode = root;
+        }
+        return sum;
+    }
+    public TreeNode lowestCommonAncestor(TreeNode root,
+                                         TreeNode p, TreeNode q) {
+        ansNode = null;
+        postCount(root, p, q);
+        return ansNode;
+    }
 }
 

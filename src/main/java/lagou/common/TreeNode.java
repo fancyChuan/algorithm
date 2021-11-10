@@ -11,6 +11,9 @@ public class TreeNode {
     // 二叉树结点的右子结点
     public TreeNode right ;
 
+    public TreeNode() {
+    }
+
     public TreeNode(int val) {
         this.val = val;
     }
