@@ -253,32 +253,41 @@ public class TreeSolution {
     }
     /**
      * 使用后序遍历，验证二叉搜索树
+     *  关键点：每次遍历，都需要做信息的归纳！
+     *      1. 左子树的最大值和当前节点比较，取最大。得到min 【二叉搜索树的定义是左子树的所有节点值，都不能大于当前节点】
+     *      2. 右子树的最小值与当前节点比较，取最小。得到max 【右子树的所有节点值，都不能小于当前节点值】
+     *      3. 这两个步骤所形成的[min,max]作为当前节点及其子树的“范围”
      */
-    public boolean isBSTPost;
-    private Long leftValue;
-    private Long rightValue;
-    // 关键的递归函数
-    public void parsePost(TreeNode root) {
-        if (!isBSTPost) {
-            return;
+    private class Range {
+        public Long min = Long.MAX_VALUE;
+        public Long max = Long.MIN_VALUE;
+        public Range() {
         }
-        if (root.left == null) {
-            leftValue = (long) root.val;
-        } else {
-            parsePost(root.left);
-        }
-        if (root.right == null) {
-            rightValue = (long) root.val;;
-        } else {
-            parsePost(root.right);
-        }
-        if (root.val <= leftValue || root.val >= rightValue) {
-            isBSTPost = false;
+        public Range(Long left, Long right) {
+            this.min = left;
+            this.max = right;
         }
     }
+    public boolean isBSTPost;
+    Range emptyRange = new Range();
+    // 关键的递归函数
+    public Range parsePost(TreeNode root) {
+        if (!isBSTPost || root == null) {
+            return emptyRange;
+        }
+        Range leftRange = parsePost(root.left);
+        Range rightRange = parsePost(root.right);
+        if (!(leftRange.max < root.val && root.val < rightRange.min)) {
+            // 不符合要求的情况
+            isBSTPost = false;
+            return emptyRange;
+        }
+        return new Range(
+                Math.min(leftRange.min, root.val),
+                Math.max(rightRange.max, root.val));
+    }
     public boolean isValidBSTPost(TreeNode root) {
-        leftValue = Long.MIN_VALUE;
-        rightValue = Long.MAX_VALUE;
+        isBSTPost = true;
         parsePost(root);
         return isBSTPost;
     }
