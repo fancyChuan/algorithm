@@ -223,7 +223,7 @@ public class TreeSolution {
 
     /**
      * 使用栈实现 后序遍历
-     *
+     *  https://leetcode-cn.com/problems/binary-tree-postorder-traversal/description/
      */
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
@@ -250,6 +250,37 @@ public class TreeSolution {
             }
         }
         return ans;
+    }
+    /**
+     * 使用后序遍历，验证二叉搜索树
+     */
+    public boolean isBSTPost;
+    private Long leftValue;
+    private Long rightValue;
+    // 关键的递归函数
+    public void parsePost(TreeNode root) {
+        if (!isBSTPost) {
+            return;
+        }
+        if (root.left == null) {
+            leftValue = (long) root.val;
+        } else {
+            parsePost(root.left);
+        }
+        if (root.right == null) {
+            rightValue = (long) root.val;;
+        } else {
+            parsePost(root.right);
+        }
+        if (root.val <= leftValue || root.val >= rightValue) {
+            isBSTPost = false;
+        }
+    }
+    public boolean isValidBSTPost(TreeNode root) {
+        leftValue = Long.MIN_VALUE;
+        rightValue = Long.MAX_VALUE;
+        parsePost(root);
+        return isBSTPost;
     }
 }
 
