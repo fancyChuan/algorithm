@@ -298,27 +298,23 @@ public class TreeSolution {
      *  https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
      */
     private TreeNode ansNode;
-    // 先实现一个递归函数：这个递归函数要实现节点的统计
+    // 先实现一个递归函数：这个递归函数要实现节点的统计，返回值是：以root这棵树找到的p和q的个数
     private int postCount(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null) {
             return 0;
         }
         int leftCnt = postCount(root.left, p, q);
         int rightCnt = postCount(root.right, p, q);
-        if (ansNode != null) {
-            return 0;
-        }
-
-        int currentCnt = 0;
-        if (root.val == p.val || root.val == q.val) {
-            currentCnt = 1;
-        }
-
-        int sum = leftCnt + rightCnt + currentCnt;
-        if (sum == 2) {
+        // 找到的目标节点的条件：左边1个+右边1个，那么根节点就是
+        // 或者就是：左边1个或者右边1个，同时根节点自己也是，这个时候结果也是根节点
+        if (leftCnt == 1 && rightCnt == 1) {
             ansNode = root;
+        } else if (leftCnt == 1 || rightCnt == 1) {
+            if (root == p || root == q) {
+                ansNode =root;
+            }
         }
-        return sum;
+        return leftCnt + rightCnt + ((root == p || root == q)? 1:0);
     }
     public TreeNode lowestCommonAncestor(TreeNode root,
                                          TreeNode p, TreeNode q) {
