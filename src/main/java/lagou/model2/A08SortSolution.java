@@ -7,6 +7,9 @@ import java.util.List;
 public class A08SortSolution {
     /**
      * 归并排序/合并排序
+     *  1. 拆分数组（找到mid）
+     *  2. 合并两个子序列[start,mid) [mid, end) 到tmp[]
+     *  3. 将tmp[]的内容覆盖写入arr。千万注意k的起始和终止位置分别为[start,end)
      */
     // 写一个递归函数，针对子数组排序
     private void msort(int[] arr, int start, int end, int tmp[]) {
@@ -32,6 +35,7 @@ public class A08SortSolution {
             }
         }
         // 把合并的结果写回原来的数组
+        // > 在递归的过程中始终会保持只覆盖参与本次递归的元素！
         for (int k = start; k < end; k++) {
             arr[k] = tmp[k];
         }
@@ -61,16 +65,22 @@ public class A08SortSolution {
             return;
         }
         int mid = start + ((end - start)>>1);
+        m1Sort(arr, start, mid, tmp);
+        m1Sort(arr, mid, end, tmp);
+
         int i = start;
         int j = mid;
         int to = start;
         while (i < mid || j < end) {
             if (j>=end || i<mid && arr[i]<=arr[j]) {
                 tmp[to++] = arr[i++];
-                cnt1 += 1; // 最核心的就是在这个位置写的这一行代码！
+                cnt1 += (j-mid); // 最核心的就是在这个位置写的这一行代码！
             } else {
                 tmp[to++] = arr[j++];
             }
+        }
+        for (int k = start; k < end; k++) {
+            arr[k] = tmp[k];
         }
     }
     public int reversePairs(int[] nums) {
