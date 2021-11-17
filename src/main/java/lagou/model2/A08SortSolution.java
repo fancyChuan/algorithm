@@ -64,11 +64,13 @@ public class A08SortSolution {
         int i = start;
         int j = mid;
         int to = start;
-        if (j>=end || i<mid && arr[i]<=arr[j]) {
-            tmp[to++] = arr[i++];
-            cnt1 += 1; // 最核心的就是在这个位置写的这一行代码！
-        } else {
-            tmp[to++] = arr[j++];
+        while (i < mid || j < end) {
+            if (j>=end || i<mid && arr[i]<=arr[j]) {
+                tmp[to++] = arr[i++];
+                cnt1 += 1; // 最核心的就是在这个位置写的这一行代码！
+            } else {
+                tmp[to++] = arr[j++];
+            }
         }
     }
     public int reversePairs(int[] nums) {
