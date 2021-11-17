@@ -5,6 +5,7 @@ import lagou.common.ListNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class A08SortSolution {
     /**
@@ -156,20 +157,63 @@ public class A08SortSolution {
         return cnt1;
     }
     /**
-     * 例1 扩展题 [315] 计算右侧小于当前元素的个数
+     * 例1 深度扩展题 [315] 计算右侧小于当前元素的个数
      *  https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/description/
+     * 关键点：
+     *  1. 在递归排序的过程中，如果记录好元素的最开始位置！
+     *      或者说，这里的关键是要返回“索引”，而正常的归并排序是返回排序后的数组
+     *      并且，原始数组arr从头到尾都没有变化过，变化的是索引数组idx
+     * 总结：
+     *  归并排序有两种处理数据的方式：
+     *      一种是直接在原始数组上修改，tmp[]存的是元素
+     *      另一种是原始数组不变，修改索引数组idx[]，这个时候tmp[]存的是索引
      */
-    private void m2Sort(int[] nums, int start, int end, int[] tmp) {
+    private int[] idx = null;
+    private int[] ans = null;
+    // 用来存放随着排序的进行，元素对应索引的变化情况
+    private int[] tmp = null;
+    private void m2Sort(int[] arr, int[] idx, int start, int end) {
         if (start >= end || start+1 >= end) {
             return;
         }
-        int m = start + ()
+        int mid = start + ((end - start) >> 1);
+        m2Sort(arr, idx, start, mid);
+        m2Sort(arr, idx, mid, end);
+
+        int i = start;
+        int j = mid;
+        int to = start;
+
+        while (i < mid || j < end) {
+            if (j >= end || i < mid && arr[idx[i]] <= arr[idx[j]]) {
+                ans[idx[i]] += j - mid;
+
+                tmp[to++] = idx[i++];
+            } else {
+                tmp[to++] = idx[j++];
+            }
+        }
+        // 将变化后的索引数组，替换掉排序前的
+        for (int k = start; k < end; k++) {
+            idx[k] = tmp[k];
+        }
     }
     public List<Integer> countSmaller(int[] nums) {
-        ArrayList<Integer> ans = new ArrayList<>();
+        // 注意边界条件：数组长度为1，不能返回null
+        if (nums == null || nums.length < 1) {
+            return null;
+        }
 
-
-        return ans;
+        int len = nums.length;
+        ans = new int[len];
+        tmp = new int[len];
+        idx = new int[len];
+        // 注意先要对idx做初始化！
+        for (int i = 0; i < len; i++) {
+            idx[i] = i;
+        }
+        m2Sort(nums, idx, 0, len);
+        return Arrays.stream(ans).boxed().collect(Collectors.toList());
     }
 
 }
