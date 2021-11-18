@@ -216,4 +216,52 @@ public class A08SortSolution {
         return Arrays.stream(ans).boxed().collect(Collectors.toList());
     }
 
+    /**
+     * 例 2：找出两个有序数组的中位数
+     * 【题目】给定两个有序数组，请找出这两个有序数组的中位数。 要求时间复杂度为 O(log(m+n))
+     *  输入：A = [1, 2], B = [3, 4]
+     *  输出：(2 + 3) / 2 = 2.5
+     *  https://leetcode-cn.com/problems/median-of-two-sorted-arrays/description/
+     *
+     * 暴力法肯定是可以解决的，就是把A和B合并成数组C，再从C中取。但是时间复杂度是O(m+n)不符合要求
+     * 要降低时间复杂度，就要减少遍历的数量。因此要考虑怎么把一部分数据直接去掉，不参与遍历，也就是跳过去！
+     *  1. 因为求中位数，因此要抛去一半的元素 k = (len - 1) >> 1
+     *  2. 要抛去的元素又在两个数组，因此一次最多只能抛去 p = (k-1)>>1 个
+     *  3. 抛去了p个元素之后，还需要抛去 k = k - p 个，因为要兼顾奇数和偶数，因此还要减去1，也就是 k = k - (p + 1)
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int len = nums1.length + nums2.length;
+        int alen = nums1.length;
+        int blen = nums2.length;
+        if (len == 0) {
+            return 0;
+        }
+
+        int i = 0;
+        int j = 0;
+        int k = (len - 1) >> 1;
+        while (k > 0) {
+            int p = (k - 1) >> 1;
+            // 判断是哪边要先抛去p个元素
+            if (j+p >= blen || i+p < alen && nums1[i+p] <= nums2[j+p]) {
+                // 说明A数组要先抛去p个元素
+                i += p + 1;
+            } else {
+                // 说明B数组得先抛去p个元素
+                j += p + 1;
+            }
+            // 已经抛去了p个元素，那么总共还需要抛的元素为
+            k -= p + 1;
+        }
+        // 需要抛的元素已经抛完了，要开始取数据了
+        double front = (j>=blen || i<alen && nums1[i] <= nums2[j]) ? nums1[i++] : nums2[j++];
+        // 判断总的元素个数是否为奇数个，从而决定中位数是1个，还是2个求平均值
+        if ((len & 1) == 1) {
+            return front;
+        }
+        // 说明是偶数，还要取后面一个值
+        double back = (j>=blen || i<alen && nums1[i] <= nums2[j]) ? nums1[i] : nums2[j];
+        return (front + back) / 2.0;
+    }
+
 }

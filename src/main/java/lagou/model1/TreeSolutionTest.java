@@ -14,6 +14,7 @@ public class TreeSolutionTest {
         System.out.println(4/2);
         System.out.println(5/2);
         System.out.println("==========");
+        // 向下取整
         System.out.println(3>>1);
         System.out.println(3>>2);
         System.out.println(4>>1);
