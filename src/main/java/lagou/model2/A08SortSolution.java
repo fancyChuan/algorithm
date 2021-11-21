@@ -282,4 +282,44 @@ public class A08SortSolution {
     /**
      * 练习题 2：合并两个有序链表
      */
+
+    /**
+     * 快排的写法
+     */
+    // 交换数据中两个元素的值
+    void swap(int[] A, int i, int j) {
+        int t = A[i];
+        A[i] = A[j];
+        A[j] = t;
+    }
+    void qsort(int[] A, int b, int e) {
+        if (b >= e || b + 1 >= e) {
+            return;
+        }
+        int m = b + ((e-b) >> 1);
+        int x = A[m];
+        // 三路切分
+        int l = b;
+        int r = e -1;
+        int i = b;
+        while (i <= r) {
+            if (A[i] < x) {
+                swap(A, l++, i++);
+            } else if (A[i] == x) {
+                i ++;
+            } else {
+                swap(A, r--, i);
+            }
+        }
+
+        qsort(A, b, l);
+        qsort(A, i, e);
+    }
+    // 主函数
+    void quickSort(int[] nums) {
+        if (nums == null) {
+            return;
+        }
+        qsort(nums, 0, nums.length);
+    }
 }
