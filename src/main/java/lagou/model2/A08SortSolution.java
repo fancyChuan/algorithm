@@ -263,5 +263,23 @@ public class A08SortSolution {
         double back = (j>=blen || i<alen && nums1[i] <= nums2[j]) ? nums1[i] : nums2[j];
         return (front + back) / 2.0;
     }
-
+    /**
+     * 练习题 1：给定两个有序数组 A，B。假设 A 数组中有足够的空间，不借助外部存储空间的情况下，请将 A，B，两个数组合并至 A 数组中。
+     * https://leetcode-cn.com/problems/merge-sorted-array/description/
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int tail = m + n - 1;
+        int i = m - 1;
+        int j = n - 1;
+        while (i>=0 || j>=0) {
+            if (j<0 || i>=0 && nums1[i]>=nums2[j]) {
+                nums1[tail--] = nums1[i--];
+            } else {
+                nums1[tail--] = nums2[j--];
+            }
+        }
+    }
+    /**
+     * 练习题 2：合并两个有序链表
+     */
 }
